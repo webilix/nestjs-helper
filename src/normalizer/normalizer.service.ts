@@ -18,7 +18,7 @@ export class NormalizerService {
         return content;
     }
 
-    private check(config1: boolean, config2: boolean): boolean {
+    private check(config1?: boolean, config2?: boolean): boolean {
         if (config1 === false || config2 === false) return false;
         return (config1 === undefined && config2 === undefined) || config1 === true || config2 === true;
     }
