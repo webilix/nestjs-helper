@@ -1,3 +1,3 @@
-# @webilix/nestjs-utils
+# @webilix/nestjs-helper
 
 This package is under development!

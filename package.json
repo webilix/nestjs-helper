@@ -1,7 +1,7 @@
 {
-    "name": "@webilix/nestjs-utils",
+    "name": "@webilix/nestjs-helper",
     "version": "0.0.0",
-    "description": "Persian utilities library for NestJS",
+    "description": "Helper library for NestJS",
     "main": "dist/index",
     "types": "dist/index",
     "scripts": {
@@ -13,6 +13,7 @@
         "persian",
         "farsi",
         "nestjs",
+        "helper",
         "normalizer",
         "validator",
         "pipe"
