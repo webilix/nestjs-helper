@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, PipeTransform, Type } from '@nes
 
 import { Helper } from '@webilix/helper-library';
 
-import { Formats, FormatsInfo } from './format.types';
+import { Formats, FormatsInfo } from '../formats';
 
 @Injectable()
 export class ArrayPipe implements PipeTransform {

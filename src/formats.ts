@@ -1,4 +1,5 @@
 import { Helper } from '@webilix/helper-library';
+import { JalaliDateTime } from '@webilix/jalali-date-time';
 
 export type Formats =
     | 'BANK-CARD'
@@ -11,7 +12,8 @@ export type Formats =
     | 'NUMBER'
     | 'NUMERIC'
     | 'OBJECT-ID'
-    | 'PLATE';
+    | 'PLATE'
+    | 'TIMEZONE';
 
 export interface IFormats {
     title: string;
@@ -30,4 +32,5 @@ export const FormatsInfo: { [key in Formats]: IFormats } = {
     NUMERIC: { title: 'رشته عددی', validator: Helper.IS.STRING.numeric },
     'OBJECT-ID': { title: 'شناسه', validator: Helper.IS.STRING.objectId },
     PLATE: { title: 'شماره پلاک', validator: Helper.IS.plate },
+    TIMEZONE: { title: 'منطقه زمانی', validator: (value: any) => JalaliDateTime().timezones().includes(value) },
 };

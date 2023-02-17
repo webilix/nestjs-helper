@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/co
 
 import { Helper } from '@webilix/helper-library';
 
-import { Formats, FormatsInfo } from './format.types';
+import { Formats, FormatsInfo } from '../formats';
 
 @Injectable()
 export class FormatPipe implements PipeTransform {
