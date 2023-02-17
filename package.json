@@ -20,7 +20,8 @@
     "author": "Ali Amirnezhad <webilix@gmail.com>",
     "license": "MIT",
     "peerDependencies": {
-        "@nestjs/common": "^9.3.9"
+        "@nestjs/common": "^9.3.9",
+        "@webilix/helper-library": "^4.2.0"
     },
     "devDependencies": {
         "@types/node": "^18.13.0",
