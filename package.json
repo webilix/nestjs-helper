@@ -1,6 +1,6 @@
 {
     "name": "@webilix/nestjs-utils",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "Persian utilities library for NestJS",
     "main": "dist/index",
     "types": "dist/index",
@@ -19,7 +19,7 @@
     ],
     "author": "Ali Amirnezhad <webilix@gmail.com>",
     "license": "MIT",
-    "peerDependencies": {
+    "dependencies": {
         "@nestjs/common": ">=9.3.9",
         "@webilix/helper-library": ">=4.2.1",
         "@webilix/jalali-date-time": ">=1.1.0"
