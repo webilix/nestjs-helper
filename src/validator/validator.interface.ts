@@ -19,6 +19,8 @@ export interface IDateCondition extends ICondition {
     readonly type: 'DATE';
     readonly minDate?: Date;
     readonly maxDate?: Date;
+    // UPDATE VALUE
+    readonly omitConvert?: boolean;
 }
 
 export interface INumberCondition extends ICondition {
@@ -36,6 +38,9 @@ export interface IStringCondition extends ICondition {
     readonly length?: number;
     readonly minLength?: number;
     readonly maxLength?: number;
+    // UPDATE VALUE
+    readonly omitTrim?: boolean;
+    readonly changeNumbers?: 'EN' | 'FA';
 }
 
 export interface IObjectCondition extends ICondition {

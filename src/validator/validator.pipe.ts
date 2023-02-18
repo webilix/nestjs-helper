@@ -25,12 +25,32 @@ export class ValidatorPipe implements PipeTransform {
         return values;
     }
 
+    private updateValue(condition: Condition, value: any): any {
+        // DATE VALUES
+        if (condition.type === 'DATE' && Helper.IS.STRING.jsonDate(value)) {
+            value = Helper.STRING.changeNumbers(value, 'EN');
+            if (!condition.omitConvert) value = new Date(value);
+        }
+
+        // STRING VALUES
+        if (condition.type === 'STRING' && Helper.IS.string(value)) {
+            if (!condition.omitTrim) value = value.trim();
+            if (condition.format) value = Helper.STRING.changeNumbers(value, 'EN');
+            else if (condition.changeNumbers) value = Helper.STRING.changeNumbers(value, condition.changeNumbers);
+        }
+
+        return value;
+    }
+
     private validate(conditions: any, values: { [key: string]: any }) {
         Object.keys(conditions).forEach((key: string) => {
             const condition: Condition = conditions[key];
 
             if (condition.array) this.validateArray(condition, values[key]);
-            else this.validateValue(condition, values[key]);
+            else {
+                values[key] = this.updateValue(condition, values[key]);
+                this.validateValue(condition, values[key]);
+            }
         });
     }
 
@@ -71,8 +91,9 @@ export class ValidatorPipe implements PipeTransform {
                 return this.setError(ValidatorMessage.maxCount(title, condition.array.maxCount));
         }
 
-        value.forEach((v: any, index: number) => {
-            this.validateValue(condition, v, index + 1);
+        value.forEach((_: any, index: number) => {
+            value[index] = this.updateValue(condition, value[index]);
+            this.validateValue(condition, value[index], index + 1);
         });
     }
 
