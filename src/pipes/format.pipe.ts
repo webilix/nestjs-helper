@@ -7,7 +7,7 @@ import { Formats, FormatsInfo } from '../formats';
 
 @Injectable()
 export class FormatPipe implements PipeTransform {
-    constructor(private readonly format: Formats, private readonly optional?: boolean, private readonly title?: string) {}
+    constructor(private readonly format: Formats, private readonly title?: string, private readonly optional?: boolean) {}
 
     transform(value: string): string | null {
         const title: string = this.title || FormatsInfo[this.format].title;
