@@ -10,3 +10,6 @@ export * from './pipes/item.pipe';
 export * from './pipes/number.pipe';
 export * from './pipes/page.pipe';
 export * from './pipes/string.pipe';
+
+export * from './validator/validator.decorator';
+export * from './validator/validator.pipe';
