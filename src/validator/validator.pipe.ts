@@ -129,7 +129,8 @@ export class ValidatorPipe implements PipeTransform {
     }
 
     private validateValue(condition: Condition, value: any, index?: number, parent?: string): void {
-        const title: string = `${parent ? `${parent}: ` : ''}${condition.title}${index ? ` ${index}` : ''}`;
+        const title: string =
+            (parent ? `${parent}: ` : '') + condition.title + (index ? ` ${Helper.NUMBER.getTitle(index)}` : '');
 
         // UNDEFINED
         if (value === undefined) return this.setError(Errors.undefined(title));
