@@ -47,6 +47,8 @@ export class ValidatorPipe implements PipeTransform {
         };
 
         const getValue = (condition: Condition, value: any): any => {
+            if (Helper.IS.empty(value)) return value;
+
             switch (condition.type) {
                 case 'BOOLEAN':
                 case 'DATE':
@@ -56,7 +58,10 @@ export class ValidatorPipe implements PipeTransform {
 
                 case 'OBJECT':
                     const childs: string[] = Object.keys(condition.childs);
-                    childs.forEach((child: string) => (value[child] = updateValue(condition.childs[child], value[child])));
+                    childs.forEach((child: string) => {
+                        if (Helper.IS.empty(value[child])) return;
+                        value[child] = updateValue(condition.childs[child], value[child]);
+                    });
                     return value;
             }
         };
