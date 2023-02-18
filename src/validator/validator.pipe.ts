@@ -19,27 +19,58 @@ export class ValidatorPipe implements PipeTransform {
     transform(values: { [key: string]: any }, meta: ArgumentMetadata) {
         this.errors = [];
         const conditions = Reflect.getMetadata('validator', meta.metatype || {});
-        if (conditions) this.validate(conditions, values);
+        if (conditions) {
+            values = this.updateValues(conditions, values);
+            this.validate(conditions, values);
+        }
 
         if (this.errors.length !== 0) throw new HttpException(this.errors, HttpStatus.BAD_REQUEST);
         return values;
     }
 
-    private updateValue(condition: Condition, value: any): any {
-        // DATE VALUES
-        if (condition.type === 'DATE' && Helper.IS.STRING.jsonDate(value)) {
-            value = Helper.STRING.changeNumbers(value, 'EN');
-            if (!condition.omitConvert) value = new Date(value);
-        }
+    private updateValues(conditions: any, values: { [key: string]: any }): { [key: string]: any } {
+        const updateValue = (condition: Condition, value: any): any => {
+            // DATE VALUES
+            if (condition.type === 'DATE' && Helper.IS.STRING.jsonDate(value)) {
+                value = Helper.STRING.changeNumbers(value, 'EN');
+                if (!condition.omitConvert) value = new Date(value);
+            }
 
-        // STRING VALUES
-        if (condition.type === 'STRING' && Helper.IS.string(value)) {
-            if (!condition.omitTrim) value = value.trim();
-            if (condition.format) value = Helper.STRING.changeNumbers(value, 'EN');
-            else if (condition.changeNumbers) value = Helper.STRING.changeNumbers(value, condition.changeNumbers);
-        }
+            // STRING VALUES
+            if (condition.type === 'STRING' && Helper.IS.string(value)) {
+                if (!condition.omitTrim) value = value.trim();
+                if (condition.format) value = Helper.STRING.changeNumbers(value, 'EN');
+                else if (condition.changeNumbers) value = Helper.STRING.changeNumbers(value, condition.changeNumbers);
+            }
 
-        return value;
+            return value;
+        };
+
+        const getValue = (condition: Condition, value: any): any => {
+            switch (condition.type) {
+                case 'BOOLEAN':
+                case 'DATE':
+                case 'NUMBER':
+                case 'STRING':
+                    return updateValue(condition, value);
+
+                case 'OBJECT':
+                    const childs: string[] = Object.keys(condition.childs);
+                    childs.forEach((child: string) => (value[child] = updateValue(condition.childs[child], value[child])));
+                    return value;
+            }
+        };
+
+        Object.keys(conditions).forEach((key: string) => {
+            const condition: Condition = conditions[key];
+
+            if (condition.array) {
+                if (Helper.IS.array(values[key]))
+                    values[key].map((_: any, index: number) => getValue(condition, values[key][index]));
+            } else values[key] = getValue(condition, values[key]);
+        });
+
+        return values;
     }
 
     private validate(conditions: any, values: { [key: string]: any }) {
@@ -47,10 +78,7 @@ export class ValidatorPipe implements PipeTransform {
             const condition: Condition = conditions[key];
 
             if (condition.array) this.validateArray(condition, values[key]);
-            else {
-                values[key] = this.updateValue(condition, values[key]);
-                this.validateValue(condition, values[key]);
-            }
+            else this.validateValue(condition, values[key]);
         });
     }
 
@@ -97,10 +125,7 @@ export class ValidatorPipe implements PipeTransform {
                 return this.setError(ValidatorMessage.unique(title));
         }
 
-        value.forEach((_: any, index: number) => {
-            value[index] = this.updateValue(condition, value[index]);
-            this.validateValue(condition, value[index], index + 1);
-        });
+        value.forEach((_: any, index: number) => this.validateValue(condition, value[index], index + 1));
     }
 
     private validateValue(condition: Condition, value: any, index?: number, parent?: string): void {
