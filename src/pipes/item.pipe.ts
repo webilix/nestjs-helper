@@ -1,7 +1,10 @@
-import { HttpException, HttpStatus, PipeTransform } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
+import { Errors } from '../errors';
+
+@Injectable()
 export class ItemPipe<T> implements PipeTransform {
     constructor(
         private readonly title: string,
@@ -12,12 +15,11 @@ export class ItemPipe<T> implements PipeTransform {
 
     transform(value: any): T | null {
         if (this.optional && Helper.IS.empty(value)) return null;
-        if (Helper.IS.empty(value)) throw new HttpException(`${this.title} مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(this.title));
 
         const values: any[] = this.callback ? this.list.map((item: T) => this.callback?.(item)) : this.list;
-        if (values.includes(value))
-            return this.callback ? this.list.find((item: T) => this.callback?.(item) === value) : value;
+        if (!values.includes(value)) Errors.throw(Errors.invalid(this.title));
 
-        throw new HttpException(`${this.title} صحیح مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        return this.callback ? this.list.find((item: T) => this.callback?.(item) === value) : value;
     }
 }

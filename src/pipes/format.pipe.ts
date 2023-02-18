@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
+import { Errors } from '../errors';
 import { Formats, FormatsInfo } from '../formats';
 
 @Injectable()
@@ -12,10 +13,10 @@ export class FormatPipe implements PipeTransform {
         const title: string = this.title || FormatsInfo[this.format].title;
 
         if (this.optional && Helper.IS.empty(value)) return null;
-        if (Helper.IS.empty(value)) throw new HttpException(`${title} مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(title));
 
-        if (FormatsInfo[this.format].validator(value)) return value;
+        if (!FormatsInfo[this.format].validator(value)) Errors.throw(Errors.invalid(title));
 
-        throw new HttpException(`${title} صحیح مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        return value;
     }
 }

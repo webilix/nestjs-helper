@@ -1,8 +1,14 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+
 import { JalaliDateTime } from '@webilix/jalali-date-time';
 
 const getDate = JalaliDateTime().toTitle;
 
-export class ValidatorMessage {
+export class Errors {
+    static throw = (error: string): void => {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    };
+
     static undefined = (title: string): string => `${title} مشخص نشده است.`;
     static invalid = (title: string): string => `${title} صحیح مشخص نشده است.`;
     static empty = (title: string): string => `مشخص کردن ${title} الزامی است.`;

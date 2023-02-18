@@ -2,9 +2,9 @@ import { Injectable, PipeTransform, ArgumentMetadata, HttpException, HttpStatus 
 
 import { Helper } from '@webilix/helper-library';
 
+import { Errors } from '../errors';
 import { FormatsInfo } from '../formats';
 
-import { ValidatorMessage } from './validator.message';
 import { Condition } from './validator.type';
 import { IDateCondition, INumberCondition, IStringCondition } from './validator.interface';
 
@@ -105,24 +105,24 @@ export class ValidatorPipe implements PipeTransform {
         const title: string = condition.title;
 
         // UNDEFINED
-        if (value === undefined) return this.setError(ValidatorMessage.undefined(title));
+        if (value === undefined) return this.setError(Errors.undefined(title));
 
         // TYPE
-        if (!Helper.IS.array(value)) return this.setError(ValidatorMessage.invalid(title));
+        if (!Helper.IS.array(value)) return this.setError(Errors.invalid(title));
 
         // COUNT && UNIQUE
         if (condition.array !== true) {
             if (condition.array.minCount && value.length < condition.array.minCount)
-                return this.setError(ValidatorMessage.minCount(title, condition.array.minCount));
+                return this.setError(Errors.minCount(title, condition.array.minCount));
 
             if (condition.array.maxCount && value.length > condition.array.maxCount)
-                return this.setError(ValidatorMessage.maxCount(title, condition.array.maxCount));
+                return this.setError(Errors.maxCount(title, condition.array.maxCount));
 
             if (
                 condition.array.unique &&
                 !Helper.IS.ARRAY.unique(value, condition.array.unique === true ? undefined : condition.array.unique)
             )
-                return this.setError(ValidatorMessage.unique(title));
+                return this.setError(Errors.unique(title));
         }
 
         value.forEach((_: any, index: number) => this.validateValue(condition, value[index], index + 1));
@@ -132,15 +132,14 @@ export class ValidatorPipe implements PipeTransform {
         const title: string = `${parent ? `${parent}: ` : ''}${condition.title}${index ? ` ${index}` : ''}`;
 
         // UNDEFINED
-        if (value === undefined) return this.setError(ValidatorMessage.undefined(title));
+        if (value === undefined) return this.setError(Errors.undefined(title));
 
         // TYPE
-        if (!this.validateType(condition, value)) return this.setError(ValidatorMessage.invalid(title));
+        if (!this.validateType(condition, value)) return this.setError(Errors.invalid(title));
 
         // REQUIRED
         const isEmpty: boolean = Helper.IS.empty(value);
-        if (condition.type !== 'BOOLEAN' && condition.required && isEmpty)
-            return this.setError(ValidatorMessage.empty(title));
+        if (condition.type !== 'BOOLEAN' && condition.required && isEmpty) return this.setError(Errors.empty(title));
         if (isEmpty) return;
 
         // CONDITIONS
@@ -165,37 +164,34 @@ export class ValidatorPipe implements PipeTransform {
 
     private validateDate(condition: IDateCondition, title: string, value: Date): void {
         if (condition.minDate && value.getTime() < condition.minDate.getTime())
-            return this.setError(ValidatorMessage.minDate(title, condition.minDate));
+            return this.setError(Errors.minDate(title, condition.minDate));
 
         if (condition.maxDate && value.getTime() > condition.maxDate.getTime())
-            return this.setError(ValidatorMessage.maxDate(title, condition.maxDate));
+            return this.setError(Errors.maxDate(title, condition.maxDate));
     }
 
     private validateNumber(condition: INumberCondition, title: string, value: number): void {
-        if (condition.minimum && value < condition.minimum)
-            return this.setError(ValidatorMessage.minimum(title, condition.minimum));
+        if (condition.minimum && value < condition.minimum) return this.setError(Errors.minimum(title, condition.minimum));
 
-        if (condition.maximum && value > condition.maximum)
-            return this.setError(ValidatorMessage.maximum(title, condition.maximum));
+        if (condition.maximum && value > condition.maximum) return this.setError(Errors.maximum(title, condition.maximum));
 
-        if (condition.in && !condition.in.includes(value)) return this.setError(ValidatorMessage.invalid(title));
+        if (condition.in && !condition.in.includes(value)) return this.setError(Errors.invalid(title));
     }
 
     private validateString(condition: IStringCondition, title: string, value: string): void {
-        if (condition.format && !FormatsInfo[condition.format].validator(value))
-            return this.setError(ValidatorMessage.invalid(title));
+        if (condition.format && !FormatsInfo[condition.format].validator(value)) return this.setError(Errors.invalid(title));
 
-        if (condition.in && !condition.in.includes(value)) return this.setError(ValidatorMessage.invalid(title));
+        if (condition.in && !condition.in.includes(value)) return this.setError(Errors.invalid(title));
 
         if (condition.length && value.length !== condition.length)
-            return this.setError(ValidatorMessage.eqLength(title, condition.length));
+            return this.setError(Errors.eqLength(title, condition.length));
 
         if (condition.minLength && value.length < condition.minLength)
-            return this.setError(ValidatorMessage.minLength(title, condition.minLength));
+            return this.setError(Errors.minLength(title, condition.minLength));
 
         if (condition.maxLength && value.length > condition.maxLength)
-            return this.setError(ValidatorMessage.maxLength(title, condition.maxLength));
+            return this.setError(Errors.maxLength(title, condition.maxLength));
 
-        if (condition.pattern && !condition.pattern.test(value)) return this.setError(ValidatorMessage.invalid(title));
+        if (condition.pattern && !condition.pattern.test(value)) return this.setError(Errors.invalid(title));
     }
 }

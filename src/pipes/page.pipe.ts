@@ -1,7 +1,8 @@
-import { PipeTransform } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
+@Injectable()
 export class PagePipe implements PipeTransform {
     transform(value: string | number): number {
         if (Helper.IS.number(value)) value = value.toString();

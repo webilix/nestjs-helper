@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable, PipeTransform, Type } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
+import { Errors } from '../errors';
 import { Formats, FormatsInfo } from '../formats';
 
 @Injectable()
@@ -18,24 +19,21 @@ export class ArrayPipe implements PipeTransform {
 
     transform(value: string[]): string[] | null {
         if (this.optional && Helper.IS.empty(value)) return null;
-        if (Helper.IS.empty(value)) throw new HttpException(`${this.title} مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(this.title));
 
-        if (!Helper.IS.array(value)) throw new HttpException(`${this.title} صحیح مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+        if (!Helper.IS.array(value)) Errors.throw(Errors.invalid(this.title));
 
         const format: Formats | undefined = this.validate?.format;
         if (format)
             value.forEach((v) => {
-                if (!FormatsInfo[format].validator(v))
-                    throw new HttpException(`${this.title} صحیح مشخص نشده است.`, HttpStatus.BAD_REQUEST);
+                if (!FormatsInfo[format].validator(v)) Errors.throw(Errors.invalid(this.title));
             });
 
         const minCount: number | undefined = this.validate?.minCount;
-        if (minCount && value.length < minCount)
-            throw new HttpException(`تعداد ${this.title} باید حداقل ${minCount} مورد باشد.`, HttpStatus.BAD_REQUEST);
+        if (minCount && value.length < minCount) Errors.throw(Errors.minCount(this.title, minCount));
 
         const maxCount: number | undefined = this.validate?.maxCount;
-        if (maxCount && value.length > maxCount)
-            throw new HttpException(`تعداد ${this.title} می‌تواند حداکثر ${maxCount} مورد باشد.`, HttpStatus.BAD_REQUEST);
+        if (maxCount && value.length > maxCount) Errors.throw(Errors.maxCount(this.title, maxCount));
 
         return value;
     }
