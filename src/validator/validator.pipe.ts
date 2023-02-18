@@ -82,13 +82,19 @@ export class ValidatorPipe implements PipeTransform {
         // TYPE
         if (!Helper.IS.array(value)) return this.setError(ValidatorMessage.invalid(title));
 
-        // COUNT
+        // COUNT && UNIQUE
         if (condition.array !== true) {
             if (condition.array.minCount && value.length < condition.array.minCount)
                 return this.setError(ValidatorMessage.minCount(title, condition.array.minCount));
 
             if (condition.array.maxCount && value.length > condition.array.maxCount)
                 return this.setError(ValidatorMessage.maxCount(title, condition.array.maxCount));
+
+            if (
+                condition.array.unique &&
+                !Helper.IS.ARRAY.unique(value, condition.array.unique === true ? undefined : condition.array.unique)
+            )
+                return this.setError(ValidatorMessage.unique(title));
         }
 
         value.forEach((_: any, index: number) => {

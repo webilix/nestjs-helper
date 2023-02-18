@@ -8,6 +8,7 @@ interface ICondition {
         | {
               readonly minCount?: number;
               readonly maxCount?: number;
+              readonly unique?: true | ((value: any) => any);
           };
 }
 
