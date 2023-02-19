@@ -7,6 +7,7 @@ export type Formats =
     | 'DATE'
     | 'DOMAIN'
     | 'EMAIL'
+    | 'IP4'
     | 'MOBILE'
     | 'NATIONAL-CODE'
     | 'NUMBER'
@@ -27,6 +28,7 @@ export const FormatsInfo: { [key in Formats]: IFormats } = {
     DATE: { title: 'تاریخ', validator: Helper.IS.STRING.jsonDate },
     DOMAIN: { title: 'دامنه', validator: Helper.IS.STRING.domain },
     EMAIL: { title: 'ایمیل', validator: Helper.IS.STRING.email },
+    IP4: { title: 'آی‌پی', validator: Helper.IS.STRING.ip4 },
     MOBILE: { title: 'موبایل', validator: Helper.IS.STRING.mobile },
     'NATIONAL-CODE': { title: 'کد ملی', validator: Helper.IS.STRING.nationalCode },
     NUMBER: { title: 'مقدار عددی', validator: Helper.IS.STRING.number },
