@@ -35,7 +35,7 @@ export class ValidatorPipe implements PipeTransform {
             switch (condition.type) {
                 case 'BOOLEAN':
                 case 'NUMBER':
-                    return;
+                    return value;
 
                 case 'DATE':
                     if (!Helper.IS.STRING.jsonDate(value)) return value;
