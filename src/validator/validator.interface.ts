@@ -12,7 +12,7 @@ interface ICondition {
           };
 }
 
-export interface IBooleanCondition extends Omit<ICondition, 'nullable'> {
+export interface IBooleanCondition extends ICondition {
     readonly type: 'BOOLEAN';
 }
 

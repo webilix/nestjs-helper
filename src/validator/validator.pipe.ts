@@ -29,38 +29,32 @@ export class ValidatorPipe implements PipeTransform {
     }
 
     private updateValues(conditions: any, values: { [key: string]: any }): { [key: string]: any } {
-        const updateValue = (condition: Condition, value: any): any => {
-            // DATE VALUES
-            if (condition.type === 'DATE' && Helper.IS.STRING.jsonDate(value)) {
-                value = Helper.STRING.changeNumbers(value, 'EN');
-                if (!condition.omitConvert) value = new Date(value);
-            }
-
-            // STRING VALUES
-            if (condition.type === 'STRING' && Helper.IS.string(value)) {
-                if (!condition.omitTrim) value = value.trim();
-                if (condition.format) value = Helper.STRING.changeNumbers(value, 'EN');
-                else if (condition.changeNumbers) value = Helper.STRING.changeNumbers(value, condition.changeNumbers);
-            }
-
-            return value;
-        };
-
-        const getValue = (condition: Condition, value: any): any => {
+        const update = (condition: Condition, value: any): any => {
             if (Helper.IS.empty(value)) return value;
 
             switch (condition.type) {
                 case 'BOOLEAN':
-                case 'DATE':
                 case 'NUMBER':
+                    return;
+
+                case 'DATE':
+                    if (!Helper.IS.STRING.jsonDate(value)) return value;
+                    value = Helper.STRING.changeNumbers(value, 'EN');
+                    if (!condition.omitConvert) value = new Date(value);
+                    return value;
+
                 case 'STRING':
-                    return updateValue(condition, value);
+                    if (!Helper.IS.string(value)) return value;
+                    if (!condition.omitTrim) value = value.trim();
+                    if (condition.format) value = Helper.STRING.changeNumbers(value, 'EN');
+                    else if (condition.changeNumbers) value = Helper.STRING.changeNumbers(value, condition.changeNumbers);
+                    return value;
 
                 case 'OBJECT':
                     const childs: string[] = Object.keys(condition.childs);
                     childs.forEach((child: string) => {
                         if (Helper.IS.empty(value[child])) return;
-                        value[child] = updateValue(condition.childs[child], value[child]);
+                        value[child] = update(condition.childs[child], value[child]);
                     });
                     return value;
             }
@@ -71,8 +65,8 @@ export class ValidatorPipe implements PipeTransform {
 
             if (condition.array) {
                 if (Helper.IS.array(values[key]))
-                    values[key].map((_: any, index: number) => getValue(condition, values[key][index]));
-            } else values[key] = getValue(condition, values[key]);
+                    values[key].map((_: any, index: number) => update(condition, values[key][index]));
+            } else values[key] = update(condition, values[key]);
         });
 
         return values;
@@ -112,6 +106,11 @@ export class ValidatorPipe implements PipeTransform {
         // UNDEFINED
         if (value === undefined) return this.setError(Errors.undefined(title));
 
+        // NULLABLE
+        const isEmpty: boolean = Helper.IS.empty(value);
+        if (!condition.nullable && isEmpty) return this.setError(Errors.empty(title));
+        if (isEmpty) return;
+
         // TYPE
         if (!Helper.IS.array(value)) return this.setError(Errors.invalid(title));
 
@@ -140,13 +139,13 @@ export class ValidatorPipe implements PipeTransform {
         // UNDEFINED
         if (value === undefined) return this.setError(Errors.undefined(title));
 
-        // TYPE
-        if (!this.validateType(condition, value)) return this.setError(Errors.invalid(title));
-
         // NULLABLE
         const isEmpty: boolean = Helper.IS.empty(value);
-        if (condition.type !== 'BOOLEAN' && !condition.nullable && isEmpty) return this.setError(Errors.empty(title));
+        if (!condition.nullable && isEmpty) return this.setError(Errors.empty(title));
         if (isEmpty) return;
+
+        // TYPE
+        if (!this.validateType(condition, value)) return this.setError(Errors.invalid(title));
 
         // CONDITIONS
         switch (condition.type) {
