@@ -26,7 +26,7 @@ export interface IDateCondition extends ICondition {
 
 export interface INumberCondition extends ICondition {
     readonly type: 'NUMBER';
-    readonly in?: number[];
+    readonly enum?: number[];
     readonly minimum?: number;
     readonly maximum?: number;
 }
@@ -35,7 +35,7 @@ export interface IStringCondition extends ICondition {
     readonly type: 'STRING';
     readonly format?: Formats;
     readonly pattern?: RegExp;
-    readonly in?: string[];
+    readonly enum?: string[];
     readonly length?: number;
     readonly minLength?: number;
     readonly maxLength?: number;

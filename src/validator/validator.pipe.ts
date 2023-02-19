@@ -181,13 +181,13 @@ export class ValidatorPipe implements PipeTransform {
 
         if (condition.maximum && value > condition.maximum) return this.setError(Errors.maximum(title, condition.maximum));
 
-        if (condition.in && !condition.in.includes(value)) return this.setError(Errors.invalid(title));
+        if (condition.enum && !condition.enum.includes(value)) return this.setError(Errors.invalid(title));
     }
 
     private validateString(condition: IStringCondition, title: string, value: string): void {
         if (condition.format && !FormatsInfo[condition.format].validator(value)) return this.setError(Errors.invalid(title));
 
-        if (condition.in && !condition.in.includes(value)) return this.setError(Errors.invalid(title));
+        if (condition.enum && !condition.enum.includes(value)) return this.setError(Errors.invalid(title));
 
         if (condition.length && value.length !== condition.length)
             return this.setError(Errors.eqLength(title, condition.length));
