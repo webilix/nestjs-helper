@@ -5,7 +5,7 @@ import { Helper } from '@webilix/helper-library';
 import { Errors } from '../errors';
 
 @Injectable()
-export class ItemPipe<T> implements PipeTransform {
+export class EnumPipe<T> implements PipeTransform {
     constructor(
         private readonly title: string,
         private readonly list: T[],
