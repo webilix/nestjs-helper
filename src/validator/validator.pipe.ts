@@ -88,7 +88,7 @@ export class ValidatorPipe implements PipeTransform {
     }
 
     private validateType(condition: Condition, value: any): boolean {
-        if (condition.type !== 'BOOLEAN' && !condition.required && value === null) return true;
+        if (Helper.IS.empty(value)) return true;
 
         switch (condition.type) {
             case 'BOOLEAN':
@@ -143,9 +143,9 @@ export class ValidatorPipe implements PipeTransform {
         // TYPE
         if (!this.validateType(condition, value)) return this.setError(Errors.invalid(title));
 
-        // REQUIRED
+        // NULLABLE
         const isEmpty: boolean = Helper.IS.empty(value);
-        if (condition.type !== 'BOOLEAN' && condition.required && isEmpty) return this.setError(Errors.empty(title));
+        if (condition.type !== 'BOOLEAN' && !condition.nullable && isEmpty) return this.setError(Errors.empty(title));
         if (isEmpty) return;
 
         // CONDITIONS

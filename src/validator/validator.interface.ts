@@ -2,7 +2,7 @@ import { Formats } from '../formats';
 
 interface ICondition {
     readonly title: string;
-    readonly required?: boolean;
+    readonly nullable?: boolean;
     readonly array?:
         | boolean
         | {
@@ -12,7 +12,7 @@ interface ICondition {
           };
 }
 
-export interface IBooleanCondition extends Omit<ICondition, 'required'> {
+export interface IBooleanCondition extends Omit<ICondition, 'nullable'> {
     readonly type: 'BOOLEAN';
 }
 
