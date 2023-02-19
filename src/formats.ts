@@ -13,7 +13,8 @@ export type Formats =
     | 'NUMERIC'
     | 'OBJECT-ID'
     | 'PLATE'
-    | 'TIMEZONE';
+    | 'TIMEZONE'
+    | 'URL';
 
 export interface IFormats {
     title: string;
@@ -33,4 +34,5 @@ export const FormatsInfo: { [key in Formats]: IFormats } = {
     'OBJECT-ID': { title: 'شناسه', validator: Helper.IS.STRING.objectId },
     PLATE: { title: 'شماره پلاک', validator: Helper.IS.plate },
     TIMEZONE: { title: 'منطقه زمانی', validator: (value: any) => JalaliDateTime().timezones().includes(value) },
+    URL: { title: 'آدرس سایت', validator: Helper.IS.STRING.url },
 };
