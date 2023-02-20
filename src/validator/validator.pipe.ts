@@ -129,6 +129,8 @@ export class ValidatorPipe implements PipeTransform {
                 return this.setError(Errors.unique(title));
         }
 
+        // Change nullable option for array values
+        condition = { ...condition, nullable: false };
         value.forEach((_: any, index: number) => this.validateValue(condition, value[index], index + 1));
     }
 
