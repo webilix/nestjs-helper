@@ -51,10 +51,10 @@ export class ValidatorPipe implements PipeTransform {
                     return value;
 
                 case 'OBJECT':
-                    const childs: string[] = Object.keys(condition.childs);
-                    childs.forEach((child: string) => {
-                        if (Helper.IS.empty(value[child])) return;
-                        value[child] = update(condition.childs[child], value[child]);
+                    const properties: string[] = Object.keys(condition.properties);
+                    properties.forEach((property: string) => {
+                        if (Helper.IS.empty(value[property])) return;
+                        value[property] = update(condition.properties[property], value[property]);
                     });
                     return value;
             }
@@ -161,9 +161,9 @@ export class ValidatorPipe implements PipeTransform {
                 return this.validateString(condition, title, value.toString());
 
             case 'OBJECT':
-                const childs: string[] = Object.keys(condition.childs);
-                childs.forEach((child: string) =>
-                    this.validateValue(condition.childs[child], value[child], undefined, title),
+                const properties: string[] = Object.keys(condition.properties);
+                properties.forEach((property: string) =>
+                    this.validateValue(condition.properties[property], value[property], undefined, title),
                 );
                 return;
         }

@@ -46,7 +46,7 @@ export interface IStringCondition extends ICondition {
 
 export interface IObjectCondition extends ICondition {
     readonly type: 'OBJECT';
-    readonly childs: {
+    readonly properties: {
         [key: string]:
             | Omit<IStringCondition, 'array'>
             | Omit<IBooleanCondition, 'array'>
