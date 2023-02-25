@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 
-import { INormalizer } from './normalizer.interface';
+import { INormalizerConfig } from './normalizer.interface';
 import { NormalizerService } from './normalizer.service';
 
 @Module({
@@ -8,7 +8,7 @@ import { NormalizerService } from './normalizer.service';
     exports: [NormalizerService],
 })
 export class NormalizerModule {
-    static register(config?: Partial<INormalizer>): DynamicModule {
+    static register(config?: Partial<INormalizerConfig>): DynamicModule {
         return {
             module: NormalizerModule,
             providers: [NormalizerService, { provide: 'NORMALIZER_CONFIG', useValue: config || {} }],

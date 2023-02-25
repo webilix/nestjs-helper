@@ -1,4 +1,4 @@
-export interface INormalizer {
+export interface INormalizerConfig {
     persian: boolean;
     english: boolean;
     arabic: boolean;

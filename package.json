@@ -21,7 +21,9 @@
     "author": "Ali Amirnezhad <webilix@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@nestjs/common": ">=9.3.9",
+        "@nestjs/common": ">=9.3.9"
+    },
+    "peerDependencies": {
         "@webilix/helper-library": ">=4.2.2",
         "@webilix/jalali-date-time": ">=1.1.0"
     },

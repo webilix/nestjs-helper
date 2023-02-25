@@ -3,7 +3,7 @@ import { Injectable, PipeTransform } from '@nestjs/common';
 import { Helper } from '@webilix/helper-library';
 
 import { Errors } from '../errors';
-import { Formats, FormatsInfo } from '../formats';
+import { Formats, FormatsEnum } from '../formats';
 
 @Injectable()
 export class ArrayPipe implements PipeTransform {
@@ -26,7 +26,7 @@ export class ArrayPipe implements PipeTransform {
         const format: Formats | undefined = this.validate?.format;
         if (format)
             value.forEach((v) => {
-                if (!FormatsInfo[format].validator(v)) Errors.throw(Errors.invalid(this.title));
+                if (!FormatsEnum[format].validate(v)) Errors.throw(Errors.invalid(this.title));
             });
 
         const minCount: number | undefined = this.validate?.minCount;

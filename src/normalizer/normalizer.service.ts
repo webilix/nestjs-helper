@@ -1,11 +1,11 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 
-import { INormalizer } from './normalizer.interface';
+import { INormalizerConfig } from './normalizer.interface';
 import { NormalizerMap } from './normalizer.map';
 
 @Injectable()
 export class NormalizerService {
-    constructor(@Optional() @Inject('NORMALIZER_CONFIG') private readonly config?: Partial<INormalizer>) {}
+    constructor(@Optional() @Inject('NORMALIZER_CONFIG') private readonly config?: Partial<INormalizerConfig>) {}
 
     private update(content: string, map: { [key: string]: string }): string {
         Object.keys(map).forEach((key: string) => {
@@ -23,7 +23,7 @@ export class NormalizerService {
         return (config1 === undefined && config2 === undefined) || config1 === true || config2 === true;
     }
 
-    normalize(text: string, config?: Partial<INormalizer>): string {
+    normalize(text: string, config?: Partial<INormalizerConfig>): string {
         // NORMALIZE
         if (this.check(this.config?.persian, config?.persian)) text = this.update(text, NormalizerMap.persian);
         if (this.check(this.config?.english, config?.english)) text = this.update(text, NormalizerMap.english);

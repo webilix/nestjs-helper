@@ -3,7 +3,7 @@ import { Injectable, PipeTransform, ArgumentMetadata, HttpException, HttpStatus 
 import { Helper } from '@webilix/helper-library';
 
 import { Errors } from '../errors';
-import { FormatsInfo } from '../formats';
+import { FormatsEnum } from '../formats';
 
 import { Condition } from './validator.type';
 import { IDateCondition, INumberCondition, IStringCondition } from './validator.interface';
@@ -186,7 +186,7 @@ export class ValidatorPipe implements PipeTransform {
     }
 
     private validateString(condition: IStringCondition, title: string, value: string): void {
-        if (condition.format && !FormatsInfo[condition.format].validator(value)) return this.setError(Errors.invalid(title));
+        if (condition.format && !FormatsEnum[condition.format].validate(value)) return this.setError(Errors.invalid(title));
 
         if (condition.enum && !condition.enum.includes(value)) return this.setError(Errors.invalid(title));
 
