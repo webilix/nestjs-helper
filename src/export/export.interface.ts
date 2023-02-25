@@ -16,7 +16,8 @@ export interface IExportConfig {
     foregroundColor: string;
     textColor: string;
 
-    gotenberg: string;
+    logo?: string;
+    gotenberg?: string;
 }
 
 export interface IExportHeader {
@@ -33,7 +34,6 @@ export interface IExportColumn {
 export interface IExportTable {
     title: string;
     description?: string;
-    logo?: string;
 
     headers?: IExportHeader[];
     columns: ExportColumn[];

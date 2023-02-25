@@ -28,7 +28,9 @@ export class ExportService {
             backgroundColor: getColor(config?.backgroundColor || this.config?.backgroundColor, '#1D5B74'),
             foregroundColor: getColor(config?.foregroundColor || this.config?.foregroundColor, '#FFFFFF'),
             textColor: getColor(config?.textColor || this.config?.textColor, '#000000'),
-            gotenberg: config?.gotenberg || this.config?.gotenberg || '',
+
+            logo: config?.logo || this.config?.logo || undefined,
+            gotenberg: config?.gotenberg || this.config?.gotenberg || undefined,
         };
     }
 
@@ -55,7 +57,6 @@ export class ExportService {
 
     private updateTable(table: IExportTable): void {
         table.description = table.description || undefined;
-        table.logo = table.logo || undefined;
         table.headers = (table.headers || []).filter((h) => !Helper.IS.empty(h.title) && !Helper.IS.empty(h.value));
 
         table.columns = table.columns.filter((c: ExportColumn) => {
@@ -185,7 +186,7 @@ export class ExportService {
 
     convertToPDF(from: string, to: string, gotenberg?: string): Promise<IExport> {
         return new Promise<IExport>((resolve, reject) => {
-            gotenberg = gotenberg || this.getConfig({}).gotenberg;
+            gotenberg = gotenberg || this.getConfig({}).gotenberg || '';
             if (Helper.IS.empty(gotenberg)) {
                 reject('تنظیمات خروجی پی‌دی‌اف، مشخص نشده است.');
                 return;

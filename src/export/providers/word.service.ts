@@ -49,7 +49,7 @@ export class ExportWordService {
             margins: { top: 100, right: 100, bottom: 100, left: 100 },
             children: [
                 this.getParagraph(docx.AlignmentType.LEFT, [
-                    this.getTextRun(text, { size: 24, bold: true, color: this.config.foregroundColor }),
+                    this.getTextRun(text, { size: 20, bold: true, color: this.config.foregroundColor }),
                 ]),
             ],
         });
@@ -172,12 +172,12 @@ export class ExportWordService {
                         new docx.Table({
                             visuallyRightToLeft: true,
                             width: { size: 100, type: docx.WidthType.PERCENTAGE },
-                            columnWidths: table.logo ? [7, 70, 23] : [70, 30],
+                            columnWidths: config.logo ? [7, 70, 23] : [70, 30],
                             rows: [
                                 new docx.TableRow({
                                     children: (
                                         [
-                                            this.getLogo(table.logo),
+                                            this.getLogo(config.logo),
                                             new docx.TableCell({
                                                 verticalAlign: docx.VerticalAlign.CENTER,
                                                 borders: { ...this.noBorder },
