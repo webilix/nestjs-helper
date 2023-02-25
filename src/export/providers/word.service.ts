@@ -49,7 +49,7 @@ export class ExportWordService {
             margins: { top: 100, right: 100, bottom: 100, left: 100 },
             children: [
                 this.getParagraph(docx.AlignmentType.LEFT, [
-                    this.getTextRun(text, { size: 20, bold: true, color: this.config.foregroundColor }),
+                    this.getTextRun(text, { bold: true, color: this.config.foregroundColor }),
                 ]),
             ],
         });
@@ -71,6 +71,7 @@ export class ExportWordService {
                     english ? docx.AlignmentType.RIGHT : docx.AlignmentType.LEFT,
                     text.split('\n').map((line: string, index: number) =>
                         this.getTextRun(line, {
+                            size: 18,
                             newLine: index !== 0,
                             font: english ? this.config.fontEN : this.config.fontFA,
                         }),
