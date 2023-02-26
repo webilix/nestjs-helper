@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as docx from 'docx';
 import * as fs from 'fs';
 
@@ -10,7 +10,7 @@ import { ExportColumn, ExportColumnEnum } from '../export.type';
 
 @Injectable()
 export class ExportWordService {
-    private config!: IExportConfig;
+    constructor(@Inject('EXPORT_CONFIG') private readonly config: IExportConfig) {}
 
     private noBorder: docx.ITableCellBorders = {
         top: { style: docx.BorderStyle.NONE },
@@ -143,16 +143,14 @@ export class ExportWordService {
         return width;
     };
 
-    export(path: string, table: IExportTable, config: IExportConfig): Promise<void> {
+    export(path: string, table: IExportTable): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
-                this.config = config;
-
                 const styles: docx.IStylesOptions = {
                     default: {
                         document: {
                             paragraph: { spacing: { before: 0, after: 0 } },
-                            run: { font: config.fontFA, rightToLeft: true, size: 20 },
+                            run: { font: this.config.fontFA, rightToLeft: true, size: 20 },
                         },
                     },
                 };
@@ -173,12 +171,12 @@ export class ExportWordService {
                         new docx.Table({
                             visuallyRightToLeft: true,
                             width: { size: 100, type: docx.WidthType.PERCENTAGE },
-                            columnWidths: config.logo ? [7, 70, 23] : [70, 30],
+                            columnWidths: this.config.logo ? [7, 70, 23] : [70, 30],
                             rows: [
                                 new docx.TableRow({
                                     children: (
                                         [
-                                            this.getLogo(config.logo),
+                                            this.getLogo(this.config.logo),
                                             new docx.TableCell({
                                                 verticalAlign: docx.VerticalAlign.CENTER,
                                                 borders: { ...this.noBorder },

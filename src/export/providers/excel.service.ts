@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as excelJS from 'exceljs';
 
 import { IExportConfig, IExportHeader, IExportTable } from '../export.interface';
@@ -6,11 +6,13 @@ import { ExportColumn, ExportColumnEnum } from '../export.type';
 
 @Injectable()
 export class ExportExcelService {
-    export(path: string, table: IExportTable, config: IExportConfig): Promise<void> {
+    constructor(@Inject('EXPORT_CONFIG') private readonly config: IExportConfig) {}
+
+    export(path: string, table: IExportTable): Promise<void> {
         const fill: excelJS.Fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: config.backgroundColor },
+            fgColor: { argb: this.config.backgroundColor },
         };
 
         return new Promise<void>(async (resolve, reject) => {
@@ -34,7 +36,7 @@ export class ExportExcelService {
                         const cell: excelJS.Cell = sheet.getCell(row + 2, column);
                         cell.style = {
                             alignment: { horizontal: 'right', wrapText: false, vertical: 'middle', readingOrder: 'rtl' },
-                            font: { color: { argb: config.foregroundColor }, name: config.fontFA, size: 10 },
+                            font: { color: { argb: this.config.foregroundColor }, name: this.config.fontFA, size: 10 },
                             fill,
                         };
                     });
@@ -97,8 +99,8 @@ export class ExportExcelService {
                             readingOrder: 'rtl',
                         },
                         font: {
-                            color: { argb: config.foregroundColor },
-                            name: config.fontFA,
+                            color: { argb: this.config.foregroundColor },
+                            name: this.config.fontFA,
                             size: 10,
                             bold: true,
                         },
@@ -123,8 +125,8 @@ export class ExportExcelService {
                                 readingOrder: 'rtl',
                             },
                             font: {
-                                color: { argb: config.textColor },
-                                name: english ? config.fontEN : config.fontFA,
+                                color: { argb: this.config.textColor },
+                                name: english ? this.config.fontEN : this.config.fontFA,
                                 size: 10,
                             },
                             numFmt: ExportColumnEnum[column.type].xlsx.format,
