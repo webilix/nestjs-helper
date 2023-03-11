@@ -14,6 +14,7 @@ export type Formats =
     | 'NUMERIC'
     | 'OBJECT-ID'
     | 'PLATE'
+    | 'TIME'
     | 'TIMEZONE'
     | 'URL';
 
@@ -45,6 +46,7 @@ export const FormatsEnum: { [key in Formats]: IFormats } = {
             return `${left} ${letter === 'ا' ? 'الف' : letter} ${right} / ایران ${iran}`;
         },
     },
+    TIME: { title: 'ساعت', validate: Helper.IS.STRING.time },
     TIMEZONE: { title: 'منطقه زمانی', validate: (value: any) => JalaliDateTime().timezones().includes(value) },
     URL: { title: 'آدرس سایت', validate: Helper.IS.STRING.url },
 };

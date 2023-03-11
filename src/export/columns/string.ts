@@ -16,7 +16,7 @@ const getValue = (value: string, column: IExportStringColumn): string => {
     if (!Helper.IS.string(value)) return '';
     if (column.format && !FormatsEnum[column.format].validate(value)) return '';
 
-    return column.format ? FormatsEnum[column.format].export?.(value) || '' : value;
+    return column.format && FormatsEnum[column.format].export ? FormatsEnum[column.format].export?.(value) || '' : value;
 };
 
 export const ExportStringMethod: IExportMethod<IExportStringColumn, string> = {
