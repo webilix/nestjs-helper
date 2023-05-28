@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 import { Helper } from '@webilix/helper-library';
 
-import { ExportExcelService, ExportPathService, ExportWordService } from './providers';
+import { ExportCsvService, ExportExcelService, ExportPathService, ExportWordService } from './providers';
 import { IExport, IExportConfig, IExportTable } from './export.interface';
 import { ExportColumn, ExportColumnEnum, ExportType, ExportTypeEnum } from './export.type';
 
@@ -12,6 +12,7 @@ import { ExportColumn, ExportColumnEnum, ExportType, ExportTypeEnum } from './ex
 export class ExportService {
     constructor(
         @Inject('EXPORT_CONFIG') private readonly config: IExportConfig,
+        private readonly csvService: ExportCsvService,
         private readonly excelService: ExportExcelService,
         private readonly pathService: ExportPathService,
         private readonly wordService: ExportWordService,
@@ -65,6 +66,9 @@ export class ExportService {
                         break;
                     case 'WORD':
                         promise = this.wordService.export(path, table);
+                        break;
+                    case 'CSV':
+                        promise = this.csvService.export(path, table);
                         break;
                 }
 

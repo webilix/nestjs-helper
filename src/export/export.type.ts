@@ -10,7 +10,7 @@ import {
 } from './columns';
 import { IExportMethod } from './export.interface';
 
-export type ExportType = 'EXCEL' | 'WORD' | 'PDF';
+export type ExportType = 'EXCEL' | 'WORD' | 'PDF' | 'CSV';
 
 interface IExportType {
     title: string;
@@ -26,6 +26,7 @@ export const ExportTypeEnum: { [key in ExportType]: IExportType } = {
         ext: 'docx',
     },
     PDF: { title: 'فرمت پی‌دی‌اف', mime: 'application/pdf', ext: 'pdf' },
+    CSV: { title: 'فرمت سی‌اس‌وی‌', mime: 'text/csv', ext: 'csv' },
 };
 
 export const ExportTypeList: ExportType[] = Object.keys(ExportTypeEnum) as ExportType[];

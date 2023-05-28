@@ -2,7 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
-import { ExportExcelService, ExportPathService, ExportWordService } from './providers';
+import { ExportCsvService, ExportExcelService, ExportPathService, ExportWordService } from './providers';
 import { IExportConfig } from './export.interface';
 import { ExportService } from './export.service';
 
@@ -30,6 +30,7 @@ export class ExportModule {
                 { provide: 'EXPORT_CONFIG', useValue: config },
                 ExportService,
 
+                ExportCsvService,
                 ExportExcelService,
                 ExportPathService,
                 ExportWordService,
