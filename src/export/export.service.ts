@@ -38,7 +38,9 @@ export class ExportService {
     public getPath = this.pathService.getPath;
     public emptyPath = this.pathService.emptyPath;
 
-    export(type: ExportType, table: IExportTable, name?: string): Promise<IExport> {
+    public export(type: ExportType, table: IExportTable): Promise<IExport>;
+    public export(type: ExportType, table: IExportTable, name: string): Promise<IExport>;
+    public export(type: ExportType, table: IExportTable, name?: string): Promise<IExport> {
         return new Promise((resolve, reject) => {
             this.updateTable(table);
             if (table.columns.length === 0 || table.rows.length === 0) {
@@ -95,7 +97,7 @@ export class ExportService {
         });
     }
 
-    convertToPDF(from: string, to: string): Promise<IExport> {
+    public convertToPDF(from: string, to: string): Promise<IExport> {
         return new Promise<IExport>((resolve, reject) => {
             let gotenberg = this.config.gotenberg || '';
             if (Helper.IS.empty(gotenberg)) {

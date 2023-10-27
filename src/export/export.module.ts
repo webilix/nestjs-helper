@@ -8,6 +8,8 @@ import { ExportService } from './export.service';
 
 @Module({})
 export class ExportModule {
+    static register(): DynamicModule;
+    static register(config: Partial<IExportConfig>): DynamicModule;
     static register(config?: Partial<IExportConfig>): DynamicModule {
         const getColor = (color: string | undefined, base: string): string =>
             (Helper.COLOR.toHEX(Helper.IS.STRING.color(color) ? color || base : base) || base).substring(1);

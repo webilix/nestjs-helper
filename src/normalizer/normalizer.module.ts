@@ -8,6 +8,8 @@ import { NormalizerService } from './normalizer.service';
     exports: [NormalizerService],
 })
 export class NormalizerModule {
+    static register(): DynamicModule;
+    static register(config: Partial<INormalizerConfig>): DynamicModule;
     static register(config?: Partial<INormalizerConfig>): DynamicModule {
         return {
             module: NormalizerModule,
