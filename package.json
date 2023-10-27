@@ -21,14 +21,14 @@
     "author": "Ali Amirnezhad <webilix@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@nestjs/common": ">=10.2.6",
-        "@webilix/helper-library": ">=4.5.3",
-        "@webilix/jalali-date-time": ">=1.2.6",
+        "@nestjs/common": ">=10.2.7",
+        "@webilix/helper-library": ">=4.15.1",
+        "@webilix/jalali-date-time": ">=1.2.27",
         "docx": ">=8.2.3",
-        "exceljs": ">=4.3.0"
+        "exceljs": ">=4.4.0"
     },
     "devDependencies": {
-        "@types/node": "^20.8.2",
+        "@types/node": "^20.8.9",
         "rimraf": "^5.0.5",
         "rxjs": "^7.8.1",
         "typescript": "^5.2.2"
