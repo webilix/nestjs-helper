@@ -22,7 +22,7 @@
     "license": "MIT",
     "dependencies": {
         "@nestjs/common": ">=10.2.7",
-        "@webilix/helper-library": ">=4.15.1",
+        "@webilix/helper-library": ">=4.15.2",
         "@webilix/jalali-date-time": ">=1.2.27",
         "docx": ">=8.2.3",
         "exceljs": ">=4.4.0"
