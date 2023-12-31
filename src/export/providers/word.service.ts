@@ -33,8 +33,10 @@ export class ExportWordService {
             break: config?.newLine ? 1 : 0,
         });
 
-    private getParagraph = (alignment: docx.AlignmentType, children: docx.ParagraphChild[]): docx.Paragraph =>
-        new docx.Paragraph({ alignment, bidirectional: true, children });
+    private getParagraph = (
+        alignment: (typeof docx.AlignmentType)[keyof typeof docx.AlignmentType],
+        children: docx.ParagraphChild[],
+    ): docx.Paragraph => new docx.Paragraph({ alignment, bidirectional: true, children });
 
     private getTH = (text: string): docx.TableCell =>
         new docx.TableCell({
@@ -48,9 +50,7 @@ export class ExportWordService {
             },
             margins: { top: 100, right: 100, bottom: 100, left: 100 },
             children: [
-                this.getParagraph(docx.AlignmentType.LEFT, [
-                    this.getTextRun(text, { bold: true, color: this.config.foregroundColor }),
-                ]),
+                this.getParagraph('left', [this.getTextRun(text, { bold: true, color: this.config.foregroundColor })]),
             ],
         });
 
@@ -68,7 +68,7 @@ export class ExportWordService {
             margins: { top: 50, right: 100, bottom: 50, left: 100 },
             children: [
                 this.getParagraph(
-                    english ? docx.AlignmentType.RIGHT : docx.AlignmentType.LEFT,
+                    english ? 'right' : 'left',
                     text.split('\n').map((line: string, index: number) =>
                         this.getTextRun(line, {
                             size: 18,
@@ -89,7 +89,7 @@ export class ExportWordService {
                   borders: { ...this.noBorder },
                   margins: { top: 0, right: 0, bottom: 100, left: 0 },
                   children: [
-                      this.getParagraph(docx.AlignmentType.CENTER, [
+                      this.getParagraph('center', [
                           new docx.ImageRun({
                               data: fs.readFileSync(image || ''),
                               transformation: { width: 50, height: 50 },
@@ -112,7 +112,7 @@ export class ExportWordService {
                                       borders: { ...this.noBorder },
                                       margins: { top: 0, right: 0, bottom: 0, left: 0 },
                                       children: [
-                                          this.getParagraph(docx.AlignmentType.LEFT, [
+                                          this.getParagraph('left', [
                                               this.getTextRun(`${h.title}: `, {
                                                   bold: true,
                                                   color: this.config.backgroundColor,
@@ -183,7 +183,7 @@ export class ExportWordService {
                                                 margins: { top: 0, right: 0, bottom: 100, left: 0 },
                                                 children: (
                                                     [
-                                                        this.getParagraph(docx.AlignmentType.LEFT, [
+                                                        this.getParagraph('left', [
                                                             this.getTextRun(table.title, {
                                                                 size: 28,
                                                                 bold: true,
@@ -199,7 +199,7 @@ export class ExportWordService {
                                                 borders: { ...this.noBorder },
                                                 margins: { top: 0, right: 0, bottom: 100, left: 0 },
                                                 children: [
-                                                    this.getParagraph(docx.AlignmentType.RIGHT, [
+                                                    this.getParagraph('right', [
                                                         this.getTextRun(
                                                             JalaliDateTime().toTitle(new Date(), { format: 'W، d N Y' }),
                                                         ),
@@ -216,7 +216,7 @@ export class ExportWordService {
 
                 const footer: docx.Footer = new docx.Footer({
                     children: [
-                        this.getParagraph(docx.AlignmentType.RIGHT, [
+                        this.getParagraph('right', [
                             new docx.TextRun({
                                 children: [docx.PageNumber.CURRENT, ' / ', docx.PageNumber.TOTAL_PAGES],
                             }),
