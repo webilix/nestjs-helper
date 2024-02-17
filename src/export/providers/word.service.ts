@@ -98,6 +98,16 @@ export class ExportWordService {
                   ],
               });
 
+    private getDescription = (description?: string): docx.Paragraph | undefined =>
+        !description
+            ? undefined
+            : this.getParagraph('left', [
+                  this.getTextRun(description, {
+                      bold: true,
+                      color: this.config.backgroundColor,
+                  }),
+              ]);
+
     private getHeader = (headers: IExportHeader[] = []): docx.Table | undefined =>
         headers.length === 0
             ? undefined
@@ -190,6 +200,7 @@ export class ExportWordService {
                                                                 color: this.config.backgroundColor,
                                                             }),
                                                         ]),
+                                                        this.getDescription(table.description),
                                                         this.getHeader(table.headers),
                                                     ] as (docx.Paragraph | docx.Table)[]
                                                 ).filter((c) => c !== undefined),
