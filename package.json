@@ -23,7 +23,7 @@
     "dependencies": {
         "@nestjs/common": ">=10.3.5",
         "@webilix/helper-library": ">=4.16.1",
-        "@webilix/jalali-date-time": ">=2.0.2",
+        "@webilix/jalali-date-time": ">=2.0.3",
         "docx": ">=8.5.0",
         "exceljs": ">=4.4.0"
     },
