@@ -23,6 +23,7 @@ export interface IExportConfig {
 export interface IExportHeader {
     title: string;
     value: string;
+    english?: boolean;
 }
 
 export interface IExportColumn {

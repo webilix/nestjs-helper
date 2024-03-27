@@ -127,7 +127,10 @@ export class ExportWordService {
                                                   bold: true,
                                                   color: this.config.backgroundColor,
                                               }),
-                                              this.getTextRun(h.value),
+                                              this.getTextRun(h.value, {
+                                                  color: this.config.backgroundColor,
+                                                  font: h.english ? this.config.fontEN : this.config.fontFA,
+                                              }),
                                           ]),
                                       ],
                                   }),

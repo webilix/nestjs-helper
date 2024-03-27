@@ -73,6 +73,13 @@ export class ExportExcelService {
 
                     const value: excelJS.Cell = sheet.getCell(rowIndex, 4);
                     value.value = header.value;
+                    value.style = {
+                        font: {
+                            color: { argb: this.config.foregroundColor },
+                            name: header.english ? this.config.fontEN : this.config.fontFA,
+                        },
+                        fill,
+                    };
 
                     rowIndex++;
                 });
