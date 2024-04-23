@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { Helper } from '@webilix/helper-library';
 import { JalaliDateTime } from '@webilix/jalali-date-time';
 
-import { IExportConfig, IExportHeader, IExportTable } from '../export.interface';
+import { IExportConfig, IExportHeader, IExportOptions, IExportTable } from '../export.interface';
 import { ExportColumn, ExportColumnEnum } from '../export.type';
 
 @Injectable()
@@ -156,7 +156,7 @@ export class ExportWordService {
         return width;
     };
 
-    export(path: string, table: IExportTable): Promise<void> {
+    export(path: string, table: IExportTable, options?: IExportOptions): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
                 const styles: docx.IStylesOptions = {
@@ -212,13 +212,17 @@ export class ExportWordService {
                                                 verticalAlign: docx.VerticalAlign.BOTTOM,
                                                 borders: { ...this.noBorder },
                                                 margins: { top: 0, right: 0, bottom: 100, left: 0 },
-                                                children: [
-                                                    this.getParagraph('right', [
-                                                        this.getTextRun(
-                                                            JalaliDateTime().toTitle(new Date(), { format: 'W، d N Y' }),
-                                                        ),
-                                                    ]),
-                                                ],
+                                                children: options?.hideDate
+                                                    ? []
+                                                    : [
+                                                          this.getParagraph('right', [
+                                                              this.getTextRun(
+                                                                  JalaliDateTime().toTitle(new Date(), {
+                                                                      format: 'W، d N Y',
+                                                                  }),
+                                                              ),
+                                                          ]),
+                                                      ],
                                             }),
                                         ] as docx.TableCell[]
                                     ).filter((c) => c !== undefined),

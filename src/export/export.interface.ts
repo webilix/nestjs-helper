@@ -41,6 +41,11 @@ export interface IExportTable {
     rows: { [key: string]: any }[];
 }
 
+export interface IExportOptions {
+    name?: string;
+    hideDate?: boolean;
+}
+
 export interface IExportMethod<C /* COLUMN */, V /* VALUE */> {
     xlsx: {
         format: string;

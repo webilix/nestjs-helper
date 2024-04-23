@@ -1,4 +1,4 @@
-export { IExport, IExportConfig, IExportHeader, IExportTable } from './export/export.interface';
+export { IExport, IExportConfig, IExportHeader, IExportTable, IExportOptions } from './export/export.interface';
 export { ExportType, ExportTypeEnum, ExportTypeList, ExportColumn } from './export/export.type';
 export * from './export/export.module';
 export * from './export/export.service';

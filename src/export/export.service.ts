@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { Helper } from '@webilix/helper-library';
 
 import { ExportCsvService, ExportExcelService, ExportPathService, ExportWordService } from './providers';
-import { IExport, IExportConfig, IExportTable } from './export.interface';
+import { IExport, IExportConfig, IExportOptions, IExportTable } from './export.interface';
 import { ExportColumn, ExportColumnEnum, ExportType, ExportTypeEnum } from './export.type';
 
 @Injectable()
@@ -39,8 +39,8 @@ export class ExportService {
     public emptyPath = this.pathService.emptyPath;
 
     public export(type: ExportType, table: IExportTable): Promise<IExport>;
-    public export(type: ExportType, table: IExportTable, name: string): Promise<IExport>;
-    public export(type: ExportType, table: IExportTable, name?: string): Promise<IExport> {
+    public export(type: ExportType, table: IExportTable, options: IExportOptions): Promise<IExport>;
+    public export(type: ExportType, table: IExportTable, options?: IExportOptions): Promise<IExport> {
         return new Promise((resolve, reject) => {
             this.updateTable(table);
             if (table.columns.length === 0 || table.rows.length === 0) {
@@ -50,7 +50,8 @@ export class ExportService {
 
             let path = '';
             try {
-                const file: string = Helper.STRING.getFileName(name || table.title, ExportTypeEnum[type].ext);
+                const name: string = options?.name || table.title;
+                const file: string = Helper.STRING.getFileName(name, ExportTypeEnum[type].ext);
                 path = `${this.getPath()}${file}`;
             } catch (e) {
                 reject('امکان ایجاد دایرکتوری اصلی خروجی اطلاعات وجود ندارد.');
@@ -64,10 +65,10 @@ export class ExportService {
                         promise = this.excelService.export(path, table);
                         break;
                     case 'PDF':
-                        promise = this.wordService.export(`${path}.docx`, table);
+                        promise = this.wordService.export(`${path}.docx`, table, options);
                         break;
                     case 'WORD':
-                        promise = this.wordService.export(path, table);
+                        promise = this.wordService.export(path, table, options);
                         break;
                     case 'CSV':
                         promise = this.csvService.export(path, table);
