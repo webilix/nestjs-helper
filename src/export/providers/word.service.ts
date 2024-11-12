@@ -91,6 +91,7 @@ export class ExportWordService {
                   children: [
                       this.getParagraph('center', [
                           new docx.ImageRun({
+                              type: 'png',
                               data: fs.readFileSync(image || ''),
                               transformation: { width: 50, height: 50 },
                           }),
