@@ -7,12 +7,18 @@ import { Formats, FormatsEnum } from '../formats';
 
 @Injectable()
 export class FormatPipe implements PipeTransform {
-    constructor(private readonly format: Formats, private readonly title?: string, private readonly optional?: boolean) {}
+    constructor(
+        private readonly format: Formats,
+        private readonly options?: Partial<{
+            readonly title: string;
+            readonly optional: boolean;
+        }>,
+    ) {}
 
     transform(value: string): string | null {
-        const title: string = this.title || FormatsEnum[this.format].title;
+        if (this.options?.optional && Helper.IS.empty(value)) return null;
 
-        if (this.optional && Helper.IS.empty(value)) return null;
+        const title: string = this.options?.title || FormatsEnum[this.format].title;
         if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(title));
 
         if (!FormatsEnum[this.format].validate(value)) Errors.throw(Errors.invalid(title));

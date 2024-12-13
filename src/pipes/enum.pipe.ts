@@ -9,17 +9,21 @@ export class EnumPipe<T> implements PipeTransform {
     constructor(
         private readonly title: string,
         private readonly list: T[],
-        private readonly optional?: boolean,
-        private readonly callback?: (item: T) => any,
+        private readonly options?: Partial<{
+            readonly optional: boolean;
+            readonly callback: (item: T) => any;
+        }>,
     ) {}
 
     transform(value: any): T | null {
-        if (this.optional && Helper.IS.empty(value)) return null;
+        if (this.options?.optional && Helper.IS.empty(value)) return null;
+
         if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(this.title));
 
-        const values: any[] = this.callback ? this.list.map((item: T) => this.callback?.(item)) : this.list;
+        const callback = this.options?.callback;
+        const values: any[] = callback ? this.list.map((item: T) => callback(item)) : this.list;
         if (!values.includes(value)) Errors.throw(Errors.invalid(this.title));
 
-        return this.callback ? this.list.find((item: T) => this.callback?.(item) === value) : value;
+        return callback ? this.list.find((item: T) => callback(item) === value) : value;
     }
 }
