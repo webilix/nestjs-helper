@@ -13,6 +13,7 @@ export * from './pipes/date.pipe';
 export * from './pipes/enum.pipe';
 export * from './pipes/format.pipe';
 export * from './pipes/number.pipe';
+export * from './pipes/order.pipe';
 export * from './pipes/page.pipe';
 export * from './pipes/string.pipe';
 
