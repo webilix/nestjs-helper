@@ -4,33 +4,32 @@ import { Helper } from '@webilix/helper-library';
 
 import { Errors } from '../errors';
 
-export interface IOrder {
-    readonly key: string;
-    readonly type: 'ASC' | 'DESC';
+export interface ISearch {
+    readonly query: string;
+    readonly type: 'PHRASE' | 'ALL' | 'EACH';
 }
 
 @Injectable()
-export class OrderPipe implements PipeTransform {
+export class SearchPipe implements PipeTransform {
     constructor(
-        private readonly keys: string[],
         private readonly options?: Partial<{
             readonly title: string;
             readonly optional: boolean;
         }>,
     ) {}
 
-    transform(value: string): IOrder | null {
+    transform(value: string): ISearch | null {
         if (this.options?.optional && Helper.IS.empty(value)) return null;
 
-        const title: string = this.options?.title || 'ترتیب نمایش';
+        const title: string = this.options?.title || 'عبارت جستجو';
         if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(title));
         if (!Helper.IS.string(value)) Errors.throw(Errors.invalid(title));
 
         const index: number = value.lastIndexOf(':');
-        const key: string = value.substring(0, index);
-        const type: 'ASC' | 'DESC' = value.substring(index + 1) as 'ASC' | 'DESC';
-        if (!this.keys.includes(key) || !['ASC', 'DESC'].includes(type)) Errors.throw(Errors.invalid(title));
+        const query: string = value.substring(0, index).trim();
+        const type: 'PHRASE' | 'ALL' | 'EACH' = value.substring(index + 1) as 'PHRASE' | 'ALL' | 'EACH';
+        if (query === '' || !['PHRASE', 'ALL', 'EACH'].includes(type)) Errors.throw(Errors.invalid(title));
 
-        return { key, type };
+        return { query, type };
     }
 }

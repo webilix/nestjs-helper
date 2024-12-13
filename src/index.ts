@@ -15,6 +15,7 @@ export * from './pipes/format.pipe';
 export * from './pipes/number.pipe';
 export * from './pipes/order.pipe';
 export * from './pipes/page.pipe';
+export * from './pipes/search.pipe';
 export * from './pipes/string.pipe';
 
 export * from './validator/validator.decorator';
