@@ -10,31 +10,36 @@ export class ArrayPipe implements PipeTransform {
     constructor(
         private readonly title: string,
         private readonly options?: Partial<{
+            readonly split: string;
             readonly format: Formats;
             readonly minCount: number;
             readonly maxCount: number;
+            readonly unique: boolean;
             readonly optional: boolean;
         }>,
     ) {}
 
-    transform(value: string[]): string[] | null {
+    transform(value: string | string[]): string[] | null {
         if (this.options?.optional && Helper.IS.empty(value)) return null;
 
-        if (Helper.IS.empty(value)) Errors.throw(Errors.undefined(this.title));
-        if (!Helper.IS.array(value)) Errors.throw(Errors.invalid(this.title));
+        const values = typeof value === 'string' ? value.split(this.options?.split || '||') : value;
+        if (Helper.IS.empty(values)) Errors.throw(Errors.undefined(this.title));
 
         const format: Formats | undefined = this.options?.format;
         if (format)
-            value.forEach((v) => {
-                if (!FormatsEnum[format].validate(v)) Errors.throw(Errors.invalid(this.title));
+            values.forEach((value) => {
+                if (!FormatsEnum[format].validate(value)) Errors.throw(Errors.invalid(this.title));
             });
 
         const minCount: number | undefined = this.options?.minCount;
-        if (minCount && value.length < minCount) Errors.throw(Errors.minCount(this.title, minCount));
+        if (minCount && values.length < minCount) Errors.throw(Errors.minCount(this.title, minCount));
 
         const maxCount: number | undefined = this.options?.maxCount;
-        if (maxCount && value.length > maxCount) Errors.throw(Errors.maxCount(this.title, maxCount));
+        if (maxCount && values.length > maxCount) Errors.throw(Errors.maxCount(this.title, maxCount));
 
-        return value;
+        const unique: boolean | undefined = this.options?.unique;
+        if (unique && !Helper.IS.ARRAY.unique(values)) Errors.throw(Errors.unique(this.title));
+
+        return values;
     }
 }
