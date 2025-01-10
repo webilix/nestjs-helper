@@ -4,9 +4,12 @@ import { Helper } from '@webilix/helper-library';
 
 import { Errors } from '../errors';
 
+type Type = 'ASC' | 'DESC';
+const typeList: Type[] = ['ASC', 'DESC'];
+
 export interface IOrder {
     readonly key: string;
-    readonly type: 'ASC' | 'DESC';
+    readonly type: Type;
 }
 
 @Injectable()
@@ -28,8 +31,8 @@ export class OrderPipe implements PipeTransform {
 
         const index: number = value.lastIndexOf(':');
         const key: string = value.substring(0, index);
-        const type: 'ASC' | 'DESC' = value.substring(index + 1) as 'ASC' | 'DESC';
-        if (!this.keys.includes(key) || !['ASC', 'DESC'].includes(type)) Errors.throw(Errors.invalid(title));
+        const type: Type = value.substring(index + 1) as Type;
+        if (!this.keys.includes(key) || !typeList.includes(type)) Errors.throw(Errors.invalid(title));
 
         return { key, type };
     }
