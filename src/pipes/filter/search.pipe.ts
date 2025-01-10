@@ -2,15 +2,18 @@ import { Injectable, PipeTransform } from '@nestjs/common';
 
 import { Helper } from '@webilix/helper-library';
 
-import { Errors } from '../errors';
+import { Errors } from '../../errors';
 
-export interface ISearch {
+type Type = 'PHRASE' | 'ALL' | 'EACH';
+const typeList: Type[] = ['PHRASE', 'ALL', 'EACH'];
+
+export interface ISearchFilter {
     readonly query: string;
-    readonly type: 'PHRASE' | 'ALL' | 'EACH';
+    readonly type: Type;
 }
 
 @Injectable()
-export class SearchPipe implements PipeTransform {
+export class SearchFilterPipe implements PipeTransform {
     constructor(
         private readonly options?: Partial<{
             readonly title: string;
@@ -18,7 +21,7 @@ export class SearchPipe implements PipeTransform {
         }>,
     ) {}
 
-    transform(value: string): ISearch | null {
+    transform(value: string): ISearchFilter | null {
         if (this.options?.optional && Helper.IS.empty(value)) return null;
 
         const title: string = this.options?.title || 'عبارت جستجو';
@@ -27,8 +30,8 @@ export class SearchPipe implements PipeTransform {
 
         const index: number = value.lastIndexOf(':');
         const query: string = value.substring(0, index).trim();
-        const type: 'PHRASE' | 'ALL' | 'EACH' = value.substring(index + 1) as 'PHRASE' | 'ALL' | 'EACH';
-        if (query === '' || !['PHRASE', 'ALL', 'EACH'].includes(type)) Errors.throw(Errors.invalid(title));
+        const type: Type = value.substring(index + 1) as Type;
+        if (query === '' || !typeList.includes(type)) Errors.throw(Errors.invalid(title));
 
         return { query, type };
     }
