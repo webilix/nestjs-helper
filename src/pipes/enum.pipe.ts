@@ -24,6 +24,6 @@ export class EnumPipe<T> implements PipeTransform {
         const values: any[] = callback ? this.list.map((item: T) => callback(item)) : this.list;
         if (!values.includes(value)) Errors.throw(Errors.invalid(this.title));
 
-        return callback ? this.list.find((item: T) => callback(item) === value) : value;
+        return callback ? (this.list.find((item: T) => callback(item) === value) ? value : null) : value;
     }
 }
