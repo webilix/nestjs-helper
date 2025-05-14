@@ -1,6 +1,6 @@
 {
     "name": "@webilix/nestjs-helper",
-    "version": "0.0.52",
+    "version": "0.0.53",
     "description": "Helper library for NestJS",
     "main": "dist/index",
     "types": "dist/index",
