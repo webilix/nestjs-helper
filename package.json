@@ -22,8 +22,8 @@
     "license": "MIT",
     "dependencies": {
         "@nestjs/common": ">=11.1.27",
-        "@webilix/helper-library": ">=6.1.7",
-        "@webilix/jalali-date-time": ">=2.0.9",
+        "@webilix/helper-library": ">=6.1.9",
+        "@webilix/jalali-date-time": ">=2.0.10",
         "docx": ">=9.7.1",
         "exceljs": ">=4.4.0",
         "rimraf": "^6.1.3"
