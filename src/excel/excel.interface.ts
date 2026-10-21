@@ -1,6 +1,6 @@
 import { Formats } from '../formats';
 
-export interface IExcel {
+export interface IExcelFile {
     readonly path: string;
     readonly mime: string;
     readonly size: number;

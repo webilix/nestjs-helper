@@ -5,7 +5,7 @@ import { Helper } from '@webilix/helper-library';
 
 import { ExcelColumnService } from '../providers/column.service';
 import { ExcelPathService } from '../providers/path.service';
-import { IExcel, IExcelConfig, IExcelSheetRow } from '../excel.interface';
+import { IExcelConfig, IExcelFile, IExcelSheetRow } from '../excel.interface';
 
 import { ExcelSheet } from './excel.sheet';
 
@@ -110,7 +110,6 @@ export class ExcelFile {
     }
 
     //#region WRITE FILE
-
     private getWriteSheets(): IWriteSheet[] {
         const writeSheets: IWriteSheet[] = [];
         this.sheets.forEach((sheet) => {
@@ -125,20 +124,22 @@ export class ExcelFile {
 
             const writeSheet: IWriteSheet = { title: sheet.title, showIndex: sheet.showIndex, columns: [] };
 
-            sheet.columns.forEach((column) => {
-                const writeColumn: IWriteColumn = {
-                    id: column.id,
-                    title: column.title,
-                    view: this._columnService.getView(column),
-                    format: this._columnService.getFormat(column),
-                    rows: rows.map((row) =>
-                        Helper.IS.empty(row[column.id]) ? null : this._columnService.getValue(column, row[column.id]),
-                    ),
-                };
+            sheet.columns
+                .filter((column) => !column.hideOn || !column.hideOn())
+                .forEach((column) => {
+                    const writeColumn: IWriteColumn = {
+                        id: column.id,
+                        title: column.title,
+                        view: this._columnService.getView(column),
+                        format: this._columnService.getFormat(column),
+                        rows: rows.map((row) =>
+                            Helper.IS.empty(row[column.id]) ? null : this._columnService.getValue(column, row[column.id]),
+                        ),
+                    };
 
-                const hasValue: boolean = writeColumn.rows.some((value) => value !== null);
-                if (hasValue || !this._hideEmptyColumns) writeSheet.columns.push(writeColumn);
-            });
+                    const hasValue: boolean = writeColumn.rows.some((value) => value !== null);
+                    if (hasValue || !this._hideEmptyColumns) writeSheet.columns.push(writeColumn);
+                });
 
             if (writeSheet.columns.length !== 0 || !this._hideEmptySheets) writeSheets.push(writeSheet);
         });
@@ -146,8 +147,8 @@ export class ExcelFile {
         return writeSheets;
     }
 
-    public writeFile(): Promise<IExcel> {
-        return new Promise<IExcel>(async (resolve, reject) => {
+    public writeFile(): Promise<IExcelFile> {
+        return new Promise<IExcelFile>(async (resolve, reject) => {
             const writeSheets = this.getWriteSheets();
             if (writeSheets.length === 0) {
                 reject('اطلاعاتی برای ایجاد فایل اکسل مشخص نشده است.');

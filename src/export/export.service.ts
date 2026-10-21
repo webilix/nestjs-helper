@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { Helper } from '@webilix/helper-library';
 
 import { ExportCsvService, ExportExcelService, ExportPathService, ExportWordService } from './providers';
-import { IExport, IExportConfig, IExportOptions, IExportTable } from './export.interface';
+import { IExportConfig, IExportFile, IExportOptions, IExportTable } from './export.interface';
 import { ExportColumn, ExportColumnEnum, ExportType, ExportTypeEnum } from './export.type';
 
 @Injectable()
@@ -38,9 +38,9 @@ export class ExportService {
     public getPath = this.pathService.getPath;
     public emptyPath = this.pathService.emptyPath;
 
-    public export(type: ExportType, table: IExportTable): Promise<IExport>;
-    public export(type: ExportType, table: IExportTable, options: IExportOptions): Promise<IExport>;
-    public export(type: ExportType, table: IExportTable, options?: IExportOptions): Promise<IExport> {
+    public export(type: ExportType, table: IExportTable): Promise<IExportFile>;
+    public export(type: ExportType, table: IExportTable, options: IExportOptions): Promise<IExportFile>;
+    public export(type: ExportType, table: IExportTable, options?: IExportOptions): Promise<IExportFile> {
         return new Promise((resolve, reject) => {
             this.updateTable(table);
             if (table.columns.length === 0 || table.rows.length === 0) {
@@ -98,8 +98,8 @@ export class ExportService {
         });
     }
 
-    public convertToPDF(from: string, to: string): Promise<IExport> {
-        return new Promise<IExport>((resolve, reject) => {
+    public convertToPDF(from: string, to: string): Promise<IExportFile> {
+        return new Promise<IExportFile>((resolve, reject) => {
             let gotenberg = this.config.gotenberg || '';
             if (Helper.IS.empty(gotenberg)) {
                 reject('تنظیمات خروجی پی‌دی‌اف، مشخص نشده است.');

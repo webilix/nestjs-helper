@@ -1,8 +1,8 @@
-export { IExcel, IExcelConfig } from './excel/excel.interface';
+export { IExcelConfig, IExcelFile } from './excel/excel.interface';
 export * from './excel/excel.module';
 export * from './excel/excel.service';
 
-export { IExport, IExportConfig, IExportHeader, IExportTable, IExportOptions } from './export/export.interface';
+export { IExportConfig, IExportFile, IExportHeader, IExportTable, IExportOptions } from './export/export.interface';
 export { ExportType, ExportTypeEnum, ExportTypeList, ExportColumn } from './export/export.type';
 export * from './export/export.module';
 export * from './export/export.service';

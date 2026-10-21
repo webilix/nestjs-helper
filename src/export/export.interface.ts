@@ -2,7 +2,7 @@ import * as excelJS from 'exceljs';
 
 import { ExportColumn } from './export.type';
 
-export interface IExport {
+export interface IExportFile {
     path: string;
     mime: string;
     size: number;
