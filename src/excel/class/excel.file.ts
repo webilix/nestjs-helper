@@ -157,7 +157,7 @@ export class ExcelFile {
             const excelWorkbook = new excelJS.Workbook();
             writeSheets.forEach((writeSheet) => {
                 const excelSheet = excelWorkbook.addWorksheet(writeSheet.title.replace(/[\*\?:\\\/\[\]]/gi, '-'), {
-                    views: [{ rightToLeft: true, state: 'frozen', xSplit: 0, ySplit: 0 + (writeSheet.showIndex ? 1 : 0) }],
+                    views: [{ rightToLeft: true, state: 'frozen', xSplit: 0 + (writeSheet.showIndex ? 1 : 0), ySplit: 1 }],
                     pageSetup: { orientation: 'portrait' },
                 });
 
