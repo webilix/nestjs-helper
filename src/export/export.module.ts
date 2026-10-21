@@ -29,9 +29,10 @@ export class ExportModule {
         return {
             module: ExportModule,
             providers: [
-                { provide: 'EXPORT_CONFIG', useValue: config },
                 ExportService,
+                { provide: 'EXPORT_CONFIG', useValue: config },
 
+                // EXTRA PROVIDERS
                 ExportCsvService,
                 ExportExcelService,
                 ExportPathService,

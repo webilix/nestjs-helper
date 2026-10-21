@@ -39,7 +39,7 @@ export const FormatsEnum: { [key in Formats]: IFormats } = {
     PLATE: {
         title: 'شماره پلاک',
         validate: Helper.IS.plate,
-        export: (value: string) => {
+        export: (value: string): string => {
             if (!Helper.IS.plate(value)) return '';
 
             const [left, letter, right, iran] = value.split('-');

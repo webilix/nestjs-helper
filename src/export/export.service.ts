@@ -44,7 +44,7 @@ export class ExportService {
         return new Promise((resolve, reject) => {
             this.updateTable(table);
             if (table.columns.length === 0 || table.rows.length === 0) {
-                reject('اطلاعاتی برای ایجاد خروجی، مشخص نشده است.');
+                reject('اطلاعاتی برای ایجاد خروجی مشخص نشده است.');
                 return;
             }
 
